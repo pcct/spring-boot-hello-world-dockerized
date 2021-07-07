@@ -1,8 +1,5 @@
 node {
-	    // reference to maven
-	    // ** NOTE: This 'maven-3.5.2' Maven tool must be configured in the Jenkins Global Configuration.
-	    def mvnHome = tool 'maven-3.5.2'
-
+	    def mvnHome = tool 'maven'
 
 	    // holds reference to docker image
 	    def dockerImage
@@ -13,10 +10,7 @@ node {
 	    stage('Clone Repo') { // for display purposes
 	      // Get some code from a GitHub repository
 	      git 'https://github.com/pcct/spring-boot-hello-world-dockerized.git'
-	      // Get the Maven tool.
-	      // ** NOTE: This 'maven-3.5.2' Maven tool must be configured
-	      // **       in the global configuration.
-	      mvnHome = tool 'maven-3.5.2'
+	      mvnHome = tool 'maven'
 	    }
 
 	    stage('Build Project') {
