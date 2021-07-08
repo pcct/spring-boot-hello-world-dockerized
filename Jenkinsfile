@@ -2,8 +2,6 @@ node {
     def gitRepository = "https://github.com/pcct/spring-boot-hello-world-dockerized.git"
 	def containerName = "spring-boot-hello-world-dockerized"
     def dockerImageTag = "${containerName}-r.${env.BUILD_NUMBER}"
-    def dockerfile = "Dockerfile.helloworld"
-
 
 	def mvnHome = tool 'maven'
 	def dockerImage
@@ -17,7 +15,7 @@ node {
 	    sh "'${mvnHome}/bin/mvn' clean package"
 
 	    echo "Creating the docker image ${dockerImageTag}"
-	    dockerImage = docker.build("${dockerImageTag}",  "-f ${dockerfile}")
+	    dockerImage = docker.build("${dockerImageTag}")
 	}
 
 	stage('Inspection'){
