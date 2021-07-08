@@ -16,7 +16,7 @@ node {
 	    sh "'${mvnHome}/bin/mvn' clean package"
 
 	    echo "Creating the docker image ${dockerImageTag}"
-	    dockerImage = docker.build("${dockerImageTag}")
+	    dockerImage = docker.build("${dockerImageTag}", "Dockerfile.helloworld")
 	}
 
 	stage('Inspection'){
