@@ -1,7 +1,6 @@
 node {
     def gitRepository = "https://github.com/pcct/spring-boot-hello-world-dockerized.git"
-	def containerName = "spring-boot-hello-world-dockerized"
-    def dockerImageTag = "${containerName}-r.${env.BUILD_NUMBER}"
+    def imageName = "spring-boot-hello-world-dockerized"
     def registry = "pcctavares/spring-boot-hello-world-dockerized"
     def registryCredential = 'dockerhub'
 
@@ -16,19 +15,19 @@ node {
 	    echo "Build project"
 	    sh "'${mvnHome}/bin/mvn' clean package"
 
-	    echo "Creating the docker image ${dockerImageTag}"
-	    dockerImage = docker.build("${dockerImageTag}")
+	    echo "Creating the docker image ${imageName}"
+	    dockerImage = docker.build("${imageName}")
 	}
 
 	stage('Inspection'){
-        echo "Starting docker image ${dockerImageTag}"
-        sh "docker run --name spring-boot-hello-world-dockerized -d -p 2222:2222 ${dockerImageTag}"
+        echo "Starting docker image ${imageName}"
+        sh "docker run --name spring-boot-hello-world-dockerized -d -p 2222:2222 ${imageName}"
 	}
 
 	stage('Decision'){
 	    echo "Decision"
-	    sh "docker stop ${containerName}"
-        sh "docker rm ${containerName}"
+	    sh "docker stop ${imageName}"
+        sh "docker rm ${imageName}"
 	}
 
 	stage('Registry'){
