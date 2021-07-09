@@ -1,47 +1,43 @@
 node {
-    def gitRepository = "https://github.com/pcct/spring-boot-hello-world-dockerized.git"
-	def containerName = "spring-boot-hello-world-dockerized"
-    def dockerImageTag = "${containerName}-r.${env.BUILD_NUMBER}"
-    def registry = "pcctavares/devops"
-    def registryCredential = 'dockerhub'
-
-	def mvnHome = tool 'maven'
-	def dockerImage
-
     environment {
-        registry = "pcctavares/devops"
+        repository = 'spring-boot-hello-world-dockerized'
+        registry = 'pcctavares/' + repository
         registryCredential = 'dockerhub'
         dockerImage = ''
+
+        gitRepository = "https://github.com/pcct/spring-boot-hello-world-dockerized.git"
     }
 
+    def mvnHome = tool 'maven'
+
 	stage('Build') {
-	    echo "Cloning the git repository ${gitRepository}"
-	    git "${gitRepository}"
+	    echo "Cloning the git repository $gitRepository"
+	    git gitRepository
 
 	    echo "Build project"
 	    sh "'${mvnHome}/bin/mvn' clean package"
 
-	    echo "Creating the docker image ${dockerImageTag}"
-	    dockerImage = docker.build("${dockerImageTag}")
+	    echo "Building docker image"
+	    dockerImage = docker.build registry + ":$BUILD_NUMBER"
 	}
 
 	stage('Inspection'){
-        echo "Starting docker image ${dockerImageTag}"
-        sh "docker run --name spring-boot-hello-world-dockerized -d -p 2222:2222 ${dockerImageTag}"
+        echo "Starting docker image $registry"
+        sh "docker run --name $repository -d -p 2222:2222 $registry"
 	}
 
 	stage('Decision'){
 	    echo "Decision"
-	    sh "docker stop ${containerName}"
-        sh "docker rm ${containerName}"
+	    sh "docker stop $repository"
+        sh "docker rm $repository"
 	}
 
 	stage('Registry'){
         echo "Registry"
-        docker.withRegistry('https://hub.docker.com/', registryCredential) {
-           dockerImage.push("${env.BUILD_NUMBER}")
-             dockerImage.push("latest")
+        docker.withRegistry('', registryCredential) {
+           dockerImage.push()
          }
+         sh "docker rmi $registry:$BUILD_NUMBER"
     }
 
     stage('Report'){
