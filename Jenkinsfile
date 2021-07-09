@@ -2,6 +2,8 @@ node {
     def gitRepository = "https://github.com/pcct/spring-boot-hello-world-dockerized.git"
 	def containerName = "spring-boot-hello-world-dockerized"
     def dockerImageTag = "${containerName}-r.${env.BUILD_NUMBER}"
+    def registry = "pcctavares/devops"
+    def registryCredential = 'dockerhub'
 
 	def mvnHome = tool 'maven'
 	def dockerImage
@@ -31,10 +33,10 @@ node {
 
 	stage('Registry'){
         echo "Registry"
-        // docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-        //    dockerImage.push("${env.BUILD_NUMBER}")
-        //      dockerImage.push("latest")
-        //  }
+        docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
+           dockerImage.push("${env.BUILD_NUMBER}")
+             dockerImage.push("latest")
+         }
     }
 
     stage('Report'){
