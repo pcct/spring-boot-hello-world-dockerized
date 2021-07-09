@@ -1,43 +1,42 @@
 node {
-    environment {
-        repository = 'spring-boot-hello-world-dockerized'
-        registry = 'pcctavares/' + repository
-        registryCredential = 'dockerhub'
-        dockerImage = ''
+    def gitRepository = "https://github.com/pcct/spring-boot-hello-world-dockerized.git"
+	def containerName = "spring-boot-hello-world-dockerized"
+    def dockerImageTag = "${containerName}-r.${env.BUILD_NUMBER}"
+    def registry = "pcctavares/spring-boot-hello-world-dockerized"
+    def registryCredential = 'dockerhub'
 
-        gitRepository = "https://github.com/pcct/spring-boot-hello-world-dockerized.git"
-    }
+	def mvnHome = tool 'maven'
+	def dockerImage
 
-    def mvnHome = tool 'maven'
 
 	stage('Build') {
-	    echo "Cloning the git repository $gitRepository"
-	    git gitRepository
+	    echo "Cloning the git repository ${gitRepository}"
+	    git "${gitRepository}"
 
 	    echo "Build project"
 	    sh "'${mvnHome}/bin/mvn' clean package"
 
-	    echo "Building docker image"
-	    dockerImage = docker.build registry + ":$BUILD_NUMBER"
+	    echo "Creating the docker image ${dockerImageTag}"
+	    dockerImage = docker.build("${dockerImageTag}")
 	}
 
 	stage('Inspection'){
-        echo "Starting docker image $registry"
-        sh "docker run --name $repository -d -p 2222:2222 $registry"
+        echo "Starting docker image ${dockerImageTag}"
+        sh "docker run --name spring-boot-hello-world-dockerized -d -p 2222:2222 ${dockerImageTag}"
 	}
 
 	stage('Decision'){
 	    echo "Decision"
-	    sh "docker stop $repository"
-        sh "docker rm $repository"
+	    sh "docker stop ${containerName}"
+        sh "docker rm ${containerName}"
 	}
 
 	stage('Registry'){
         echo "Registry"
-        docker.withRegistry('', registryCredential) {
-           dockerImage.push()
+        docker.withRegistry('', "${registryCredential}") {
+           dockerImage.push("${env.BUILD_NUMBER}")
+             dockerImage.push("latest")
          }
-         sh "docker rmi $registry:$BUILD_NUMBER"
     }
 
     stage('Report'){
