@@ -8,6 +8,11 @@ node {
 	def mvnHome = tool 'maven'
 	def dockerImage
 
+    environment {
+        registry = "pcctavares/devops"
+        registryCredential = 'dockerhub'
+        dockerImage = ''
+    }
 
 	stage('Build') {
 	    echo "Cloning the git repository ${gitRepository}"
@@ -33,7 +38,7 @@ node {
 
 	stage('Registry'){
         echo "Registry"
-        docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
+        docker.withRegistry('', registryCredential) {
            dockerImage.push("${env.BUILD_NUMBER}")
              dockerImage.push("latest")
          }
