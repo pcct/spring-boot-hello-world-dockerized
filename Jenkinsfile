@@ -38,7 +38,7 @@ node {
 
 	stage('Registry'){
         echo "Registry"
-        docker.withRegistry('', registryCredential) {
+        docker.withRegistry('https://hub.docker.com/', registryCredential) {
            dockerImage.push("${env.BUILD_NUMBER}")
              dockerImage.push("latest")
          }
