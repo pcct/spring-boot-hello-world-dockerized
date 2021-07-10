@@ -20,7 +20,7 @@ node {
 
 	stage('Inspection'){
         echo "Starting docker image ${imageName}"
-        sh "docker run --name spring-boot-hello-world-dockerized -d -p 2222:2222 ${imageName}"
+        sh "docker run --name ${imageName} -d -p 2222:2222 ${imageName}"
 	}
 
 	stage('Decision'){
