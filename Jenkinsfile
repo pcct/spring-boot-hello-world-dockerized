@@ -1,7 +1,6 @@
 node {
     def gitRepository = "https://github.com/pcct/spring-boot-hello-world-dockerized.git"
-    def imageName = "spring-boot-hello-world-dockerized"
-    def registry = "pcctavares/spring-boot-hello-world-dockerized"
+    def imageName = "pcctavares/spring-boot-hello-world-dockerized"
     def registryCredential = 'dockerhub'
 
 	def mvnHome = tool 'maven'
@@ -33,8 +32,7 @@ node {
 	stage('Registry'){
         echo "Registry"
         docker.withRegistry('', "${registryCredential}") {
-           dockerImage.push("${env.BUILD_NUMBER}")
-             dockerImage.push("latest")
+           dockerImage.push()
          }
     }
 
