@@ -26,7 +26,7 @@ node {
         echo "Starting docker image ${imageName}"
         sh "docker run --name ${containerName} -d -p 2222:2222 ${imageName}"
         sh "chmod +x -R ${env.WORKSPACE}"
-        inspectionResult = sh "./inspection.sh"
+        inspectionResult = sh(script: "./inspection.sh", returnStatus: true) == 0
         set +e
         sh "docker stop ${containerName}"
         sh "docker rm ${containerName}"
