@@ -7,6 +7,9 @@ node {
 	def mvnHome = tool 'maven'
 	def dockerImage
 
+    def inspectionResult
+	def abort = false
+
 
 	stage('Build') {
 	    echo "Cloning the git repository ${gitRepository}"
@@ -19,26 +22,33 @@ node {
 	    dockerImage = docker.build("${imageName}")
 	}
 
-	stage('Inspection'){
+	stage('Inspection') {
         echo "Starting docker image ${imageName}"
         sh "docker run --name ${containerName} -d -p 2222:2222 ${imageName}"
-	}
-
-	stage('Decision'){
-	    echo "Decision"
-	    sh "docker stop ${containerName}"
+        inspectionResult = sh "./inspection.sh"
+        sh "docker stop ${containerName}"
         sh "docker rm ${containerName}"
 	}
 
-	stage('Registry'){
-        echo "Registry"
-        docker.withRegistry('', "${registryCredential}") {
-           dockerImage.push()
-         }
+	stage('Report') {
+        echo "Report"
+
     }
 
-    stage('Report'){
-        echo "Report"
+	stage('Decision') {
+	    echo "Decision"
+	    if(inspectionResult!=0) {
+	         currentBuild.result = 'ABORTED'
+	         echo "Some inspections have failed"
+	         return
+	    }
+
+	}
+
+	stage('Registry') {
+        echo "Registry"
+//         docker.withRegistry('', "${registryCredential}") {
+//         dockerImage.push()
     }
 
 }
