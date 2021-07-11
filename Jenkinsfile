@@ -30,7 +30,7 @@ node {
            inspectionResult = sh (
                 script: "./inspection.sh",
                 returnStatus: true
-            ).trim()
+            )
             echo "Inspection result: ${inspectionResult}"
         }
         sh "docker stop ${containerName}"
