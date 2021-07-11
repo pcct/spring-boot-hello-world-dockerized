@@ -29,7 +29,7 @@ node {
         script {
            inspectionResult = sh (
                 script: "./inspection.sh",
-                returnStdout: true
+                returnStatus: true
             ).trim()
             echo "Inspection result: ${inspectionResult}"
         }
