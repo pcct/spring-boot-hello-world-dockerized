@@ -39,7 +39,7 @@ node {
 
 	stage('Report') {
         echo "Report"
-        cat report
+        cat "report"
     }
 
 	stage('Decision') {
