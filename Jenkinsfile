@@ -28,7 +28,7 @@ node {
         sh "chmod +x -R ${env.WORKSPACE}"
         script {
            inspectionResult = sh (
-                script: "./inspection.sh > report",
+                script: "./inspection.sh > report.txt",
                 returnStatus: true
             )
             echo "Inspection result: ${inspectionResult}"
@@ -38,8 +38,10 @@ node {
 	}
 
 	stage('Report') {
-        echo "Report"
-        cat "report"
+         script {
+            def report = readFile(file: 'report.txt')
+            println(data)
+        }
     }
 
 	stage('Decision') {
