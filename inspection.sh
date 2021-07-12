@@ -37,7 +37,7 @@ check_kernel_capabilities_are_restricted() {
   if [ $fail -eq 0 ]; then
     report="$report PASS - $description\n"
   else
-    report="$report FAIL - $description - Capabilities added for containers $caps_containers\n"
+    report="$report FAIL - $description - Capabilities added for containers: $caps_containers\n"
     result=1
   fi
 }
@@ -119,7 +119,7 @@ check_container_without_additional_privileges() {
   if [ $fail -eq 0 ]; then
     report="$report PASS - $description\n"
   else
-    report="$report FAIL - $description - Containers without restricted privileges" "$addprivs_containers\n"
+    report="$report FAIL - $description - Containers without restricted privileges: $addprivs_containers\n"
     result=1
   fi
 }
@@ -134,10 +134,10 @@ if [ -z "$containers" ]; then
 fi
 
 #custom inspections
-check_container_without_additional_privileges
 check_kernel_capabilities_are_restricted
 check_health_check_instruction
 check_host_system_directories_are_not_mounted
+check_container_without_additional_privileges
 
 
 echo "$report"
