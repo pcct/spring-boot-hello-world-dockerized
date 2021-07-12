@@ -8,7 +8,6 @@ node {
 	def dockerImage
 
     def inspectionResult
-	def abort = false
 
 
 	stage('Build') {
