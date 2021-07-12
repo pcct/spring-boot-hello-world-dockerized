@@ -40,7 +40,7 @@ node {
 	stage('Report') {
          script {
             def report = readFile(file: 'report.txt')
-            println(data)
+            println(report)
         }
     }
 
