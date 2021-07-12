@@ -134,10 +134,11 @@ if [ -z "$containers" ]; then
 fi
 
 #custom inspections
+check_container_without_additional_privileges
 check_kernel_capabilities_are_restricted
 check_health_check_instruction
 check_host_system_directories_are_not_mounted
-check_container_without_additional_privileges
+
 
 echo "$report"
 return $result
