@@ -28,7 +28,7 @@ node {
         sh "chmod +x -R ${env.WORKSPACE}"
         script {
            inspectionResult = sh (
-                script: "./inspection.sh",
+                script: "./inspection.sh > report",
                 returnStatus: true
             )
             echo "Inspection result: ${inspectionResult}"
@@ -39,7 +39,7 @@ node {
 
 	stage('Report') {
         echo "Report"
-
+        cat report
     }
 
 	stage('Decision') {
