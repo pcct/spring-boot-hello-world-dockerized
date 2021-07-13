@@ -54,6 +54,7 @@ node {
 	stage('Registry') {
         docker.withRegistry('', "${registryCredential}") {
             dockerImage.push()
+        }
     }
 
 }
