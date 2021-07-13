@@ -55,8 +55,8 @@ node {
 
 	stage('Registry') {
         echo "Registry"
-//         docker.withRegistry('', "${registryCredential}") {
-//         dockerImage.push()
+         docker.withRegistry('', "${registryCredential}") {
+         dockerImage.push()
     }
 
 }
