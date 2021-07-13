@@ -47,6 +47,12 @@ For **maven** download and install de most recent version, like the image bellow
 
 ---
 
+### Add registry credentials
+For the **registry stage**, is needed to set up a docker hub account with a public repository.
+![credentials](./images/credentials.PNG)
+
+---
+
 ### Creating the pipeline:
 From the dashboard, just click on 'New Item', enter a name, select Pipeline and click 'Ok'.
 ![new item](./images/jenkins_new_item.PNG)
@@ -63,4 +69,4 @@ Just click on 'Build Now' and verify the results.
 ---
 
 ## Acknowledgments
-The script that do the security inspections was heavily inspired on code made by https://github.com/docker/docker-bench-security
+The '**inspections.sh**' script that do the security inspections was heavily inspired on code available on https://github.com/docker/docker-bench-security
