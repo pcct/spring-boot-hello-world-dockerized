@@ -52,8 +52,10 @@ node {
 	}
 
 	stage('Registry') {
-        docker.withRegistry('', "${registryCredential}") {
-            dockerImage.push()
+	    if(inspectionResult!=0) {
+            docker.withRegistry('', "${registryCredential}") {
+                dockerImage.push()
+            }
         }
     }
 
