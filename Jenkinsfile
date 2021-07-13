@@ -44,19 +44,16 @@ node {
     }
 
 	stage('Decision') {
-	    echo "Decision"
 	    if(inspectionResult!=0) {
 	         currentBuild.result = 'ABORTED'
 	         echo "Some inspections have failed"
 	         return
 	    }
-
 	}
 
 	stage('Registry') {
-        echo "Registry"
-         docker.withRegistry('', "${registryCredential}") {
-         dockerImage.push()
+        docker.withRegistry('', "${registryCredential}") {
+            dockerImage.push()
     }
 
 }
